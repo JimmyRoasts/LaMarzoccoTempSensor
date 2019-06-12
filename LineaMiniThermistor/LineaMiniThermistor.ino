@@ -1,5 +1,8 @@
 // This Firmware was developed from the Adafruit Thermistor example
-// 
+// It uses an Arduino nano to read a thermistor on pin A2
+// The thermistor is believed to be a 50k NTC thermistor
+// Since the manufacturer is unknown the Beta Value is also unknown
+// The model below seems to work okay, but any help is appreciated :)
 
 #include <Arduino.h>
 #include <TM1637Display.h>
