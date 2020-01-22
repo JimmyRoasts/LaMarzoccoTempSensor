@@ -81,7 +81,9 @@ void loop(void) {
     while (sample_count < NUMSAMPLES) {
       
         sum += ((analogRead(THERMISTORPIN) * VOLTAGEREF)/1024);
-        delay(100);
+        delay(100); // Delay as a lazy way to slow the update rate of the LCD screen. Personal preference as I didn't like the flickering
+                    // It's not necessary to have a delay and a better implementation would be to have a timer that causes the LCD to report
+                    // TODO: Make a timer loop that updates the LCD
 
         sample_count++;
     }
