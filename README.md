@@ -16,15 +16,11 @@ The arduino needs the addition of a LM4040 reference diode for accurate measurem
 
 I've created a custom control board and circuit which can be found here. I suggest ordering from JLPCB. 
 
-NB! - THIS HAS YET TO BE TESTED BY ME, I'LL UPDATE AS SOON AS I GET THE BOARDS
-https://easyeda.com/williamstownroasters/lm-temperature-sensor
-NB! - THIS HAS YET TO BE TESTED BY ME, I'LL UPDATE AS SOON AS I GET THE BOARDS
+https://easyeda.com/williamstownroasters/lm-temperature-sensor **Tested and Working** Dec, 2019
 
 To install;
 
 1. Upload ino file to arduino nano, if you need the TM1367 library, I've included that too.
 2. The thermistor header from the main LM board will have 2 pins. 1 is GND and the other is Signal. The signal pin needs to be read by pin A2 on the arduino. You will need to make up a custom header for this.
 
-I've got a few documents that describe how the board is setup on the home mini for reference. Makre sure your jumper wires are installed correctly. 
-
-
+I've got a few documents that describe how the board is setup on the home mini for reference. Makre sure your jumper wires are installed correctly.
