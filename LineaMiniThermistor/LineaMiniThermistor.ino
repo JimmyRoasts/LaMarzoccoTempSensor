@@ -47,6 +47,8 @@
 
 #define LMREF  5.07 //measured from LMBoard --- GND Board
 
+#define ReportDelay 500 //500 milliseconds between reports
+
 
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  
  
@@ -57,10 +59,13 @@ unsigned char sample_count = 0; // current sample number
 float voltage = 0.0;            // calculated voltage
 float THERMISTORRES = 0.00; // Thermistor calculated resistance
 
-
 unsigned int ADCValue;
 double Voltage;
 double Vcc;
+
+unsigned long previousMillis=0;
+
+float steinhart; //variable to hold steinhart equation result
 
  
 void setup(void) {
@@ -75,15 +80,13 @@ void setup(void) {
 void loop(void) {
   uint8_t i;
   float average;
-    
 
+  unsigned currentMillis= millis(); //Get the current time
+    
     // take a number of analog samples and add them up
     while (sample_count < NUMSAMPLES) {
       
         sum += ((analogRead(THERMISTORPIN) * VOLTAGEREF)/1024);
-        delay(100); // Delay as a lazy way to slow the update rate of the LCD screen. Personal preference as I didn't like the flickering
-                    // It's not necessary to have a delay and a better implementation would be to have a timer that causes the LCD to report
-                    // TODO: Make a timer loop that updates the LCD
 
         sample_count++;
     }
@@ -104,8 +107,6 @@ void loop(void) {
   Serial.print("Thermistor resistance "); 
   Serial.println(THERMISTORRES);
   
-  float steinhart;
-  
   steinhart = THERMISTORRES / THERMISTORNOMINAL;
   steinhart = log(steinhart);                  // ln(R/Ro)
   steinhart /= BCOEFFICIENT;                   // 1/B * ln(R/Ro)
@@ -121,6 +122,20 @@ void loop(void) {
   int temp = steinhart*100;
   float temp2 = temp/10;
 
+  if ((currentMillis - previousMillis)>= ReportDelay){
+    lcdReport(); //refresh the lcd
+    previousMillis = millis(); //reset the timer
+  }
+
+  voltage = 0; //reset
+  THERMISTORRES = 0; //reset
+  average = 0;// reset
+  temp = 0;//reset
+  temp2 = 0; //reset 
+}
+
+void lcdReport(){
+   lcd.clear();
    lcd.setCursor(0, 0);
    lcd.print("Voltage: ");
    lcd.print(voltage,2);
@@ -128,9 +143,4 @@ void loop(void) {
    lcd.print("Temp: ");
    lcd.print(steinhart,1);
 
-  voltage = 0; //reset
-  THERMISTORRES = 0; //reset
-  average = 0;// reset
-  temp = 0;//reset
-  temp2 = 0; //reset 
 }
